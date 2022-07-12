@@ -13,5 +13,10 @@ UCLASS()
 class KEYBOARD_MAGES_API AKeyboard_MagesGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AKeyboard_MagesGameModeBase();
+
+protected:
+	virtual void BeginPlay() override;
 };

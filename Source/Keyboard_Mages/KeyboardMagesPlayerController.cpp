@@ -16,7 +16,9 @@ AKeyboardMagesPlayerController::AKeyboardMagesPlayerController()
 
 void AKeyboardMagesPlayerController::BeginPlay()
 {
-	m_InputMode.SetHideCursorDuringCapture(true);
+	SetShowMouseCursor(false);
+	
+	m_InputMode.SetConsumeCaptureMouseDown(true);
 	SetInputMode(m_InputMode);
 
 	if (HUD)
@@ -28,15 +30,13 @@ void AKeyboardMagesPlayerController::BeginPlay()
 		{
 			m_HUD->AddToViewport();
 
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), WidgetChildren.Num()));
 			if (m_HUD->GetWidgetFromName("SpellText"))
 			{
 				m_SpellTextBox = Cast<UEditableTextBox>(m_HUD->GetWidgetFromName("SpellText"));
 
 				if (m_SpellTextBox)
 				{
-					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("found"));
-					//m_SpellTextBox->SetText(FText::FromString(TEXT("your text")));
+					m_SpellTextBox->SetFocus();
 				}
 
 			}
@@ -44,4 +44,16 @@ void AKeyboardMagesPlayerController::BeginPlay()
 		}
 
 	}
+}
+
+void AKeyboardMagesPlayerController::CastSpell()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, m_SpellTextBox->GetText().ToString());
+	m_SpellTextBox->SetText(FText::FromString(""));
+
+}
+
+void AKeyboardMagesPlayerController::ClearTextBox()
+{
+	m_SpellTextBox->SetText(FText::FromString(""));
 }

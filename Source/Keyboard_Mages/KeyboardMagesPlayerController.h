@@ -25,16 +25,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 		TSubclassOf<UUserWidget> HUD;
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void CastSpell();
+
+	void ClearTextBox();
+
 protected:
 
 	virtual void BeginPlay() override;
 
 private:
-	FInputModeGameAndUI m_InputMode;
 
-	// Variable to hold the widget After Creating it.
+private:
+	FInputModeGameOnly m_InputMode;
+
+	UPROPERTY()
 	UUserWidget* m_HUD;
 
+	UPROPERTY()
 	UEditableTextBox* m_SpellTextBox;
 	
 };

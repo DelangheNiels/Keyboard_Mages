@@ -26,16 +26,16 @@ public:
 		TSubclassOf<UUserWidget> HUD;
 
 public:
-	UFUNCTION(BlueprintCallable)
-	void CastSpell();
 
-	void ClearTextBox();
+	FString GetTextboxText() const;
+
+	void ClearTextbox();
+
+	void EnableTextBox(bool enable);
 
 protected:
 
 	virtual void BeginPlay() override;
-
-private:
 
 private:
 	FInputModeGameOnly m_InputMode;

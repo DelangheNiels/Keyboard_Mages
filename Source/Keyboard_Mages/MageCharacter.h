@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+class ABaseSpell;
+
 UCLASS()
 class KEYBOARD_MAGES_API AMageCharacter : public ABaseCharacter
 {
@@ -17,6 +20,9 @@ class KEYBOARD_MAGES_API AMageCharacter : public ABaseCharacter
 public:
 	AMageCharacter();
 
+	UPROPERTY(EditAnywhere, Category = "Spells")
+		TArray<TSubclassOf<ABaseSpell>> m_Spells;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -24,5 +30,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void CastSpell() override;
+
+private:
+
+
 	
 };

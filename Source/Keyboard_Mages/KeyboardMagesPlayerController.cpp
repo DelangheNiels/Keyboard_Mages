@@ -46,14 +46,21 @@ void AKeyboardMagesPlayerController::BeginPlay()
 	}
 }
 
-void AKeyboardMagesPlayerController::CastSpell()
+FString AKeyboardMagesPlayerController::GetTextboxText() const
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, m_SpellTextBox->GetText().ToString());
+	return m_SpellTextBox->GetText().ToString();
+}
+
+void AKeyboardMagesPlayerController::ClearTextbox()
+{
 	m_SpellTextBox->SetText(FText::FromString(""));
 
 }
 
-void AKeyboardMagesPlayerController::ClearTextBox()
+void AKeyboardMagesPlayerController::EnableTextBox(bool enable)
 {
-	m_SpellTextBox->SetText(FText::FromString(""));
+	m_SpellTextBox->SetIsReadOnly(!enable);
+
+	if (enable)
+		m_SpellTextBox->SetFocus();
 }

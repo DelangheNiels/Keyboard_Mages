@@ -16,16 +16,29 @@ ABaseCharacter::ABaseCharacter()
 	m_MaxHealth = 100.0f;
 	m_CurrentHealth = m_MaxHealth;
 
+	m_IsAttacking = false;
+	m_IsHit = false;
+
 }
 
-float ABaseCharacter::GetCurrentHealth()
+float ABaseCharacter::GetCurrentHealth() const
 {
 	return m_CurrentHealth;
 }
 
-float ABaseCharacter::GetHealthPercentage()
+float ABaseCharacter::GetHealthPercentage() const
 {
 	return m_CurrentHealth / m_MaxHealth;
+}
+
+bool ABaseCharacter::GetIsAttacking() const
+{
+	return m_IsAttacking;
+}
+
+bool ABaseCharacter::GetIsHit() const
+{
+	return m_IsHit;
 }
 
 // Called when the game starts or when spawned
@@ -39,6 +52,9 @@ void ABaseCharacter::BeginPlay()
 	{
 		m_pPlayerController->SetViewTargetWithBlend(Camera);
 	}
+
+	if(m_pAttackingMontage)
+		m_AttackDuration = m_pAttackingMontage->CalculateSequenceLength();
 		
 }
 
@@ -58,6 +74,6 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ABaseCharacter::CastSpell()
 {
-	m_pPlayerController->ClearTextBox();
+	m_IsAttacking = true;
 }
 

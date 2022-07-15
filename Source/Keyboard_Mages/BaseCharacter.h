@@ -17,18 +17,32 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-	UFUNCTION(BlueprintCallable)
-		float GetCurrentHealth();
-
-	UFUNCTION(BlueprintCallable)
-		float GetHealthPercentage();
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
-	AActor* Camera;
+		AActor* Camera;
+
+	UPROPERTY(EditAnywhere, Category = "Animation Montages")
+		UAnimMontage* m_pAttackingMontage;
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY()
+	AKeyboardMagesPlayerController* m_pPlayerController;
+
+	
+	float m_MaxHealth;
+	
+	float m_CurrentHealth;
+
+	bool m_IsAttacking;
+
+	bool m_IsHit;
+
+	float m_AttackTime;
+
+	float m_AttackDuration;
 
 public:	
 	// Called every frame
@@ -40,12 +54,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void CastSpell();
 
+	UFUNCTION(BlueprintCallable)
+		float GetCurrentHealth() const;
+
+	UFUNCTION(BlueprintCallable)
+		float GetHealthPercentage() const;
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsAttacking() const;
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsHit() const;
+
 private:
-	UPROPERTY()
-		float m_MaxHealth;
-	UPROPERTY()
-		float m_CurrentHealth;
-
-	AKeyboardMagesPlayerController* m_pPlayerController;
-
 };

@@ -4,26 +4,36 @@
 
 #include "CoreMinimal.h"
 #include "BaseSpell.h"
-#include "Spell_Incendio.generated.h"
+#include "Spell_Protego.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class KEYBOARD_MAGES_API ASpell_Incendio : public ABaseSpell
+class KEYBOARD_MAGES_API ASpell_Protego : public ABaseSpell
 {
 	GENERATED_BODY()
 
 public:
 
-	ASpell_Incendio();
+	ASpell_Protego();
+
+	UPROPERTY(EditAnywhere, Category = "Spell")
+		FVector m_MeshScale;
+
+	UPROPERTY(EditAnywhere, Category = "Spell")
+		float m_TimeToDissapear;
+
+private:
+
+	float m_AliveTimer;
 
 protected:
 
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
 
 private:

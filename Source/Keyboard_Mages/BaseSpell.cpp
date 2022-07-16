@@ -3,6 +3,7 @@
 
 #include "BaseSpell.h"
 #include "BaseCharacter.h"
+#include "Spell_Protego.h"
 
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -42,7 +43,9 @@ void ABaseSpell::BeginPlay()
 {
 	Super::BeginPlay();
 	m_pSphereCollision->SetSphereRadius(m_CollisionSphereRadius);
-	//m_pSphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ABaseSpell::OnOverlapBegin);
+
+	if (m_pSphereCollision)
+		m_pSphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ABaseSpell::OnOverlapBegin);
 }
 
 // Called every frame
@@ -50,6 +53,10 @@ void ABaseSpell::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector newLocation = GetActorLocation();
+	newLocation.Y += m_MovementSpeed * DeltaTime;
+
+	SetActorLocation(newLocation);
 }
 
 FString ABaseSpell::GetSpellName()
@@ -62,12 +69,19 @@ void ABaseSpell::SetCaster(ABaseCharacter* caster)
 	m_pCaster = caster;
 }
 
-//void ABaseSpell::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
-//{
-//	/*if (otherActor != m_pCaster && m_pCaster != nullptr)
-//	{
-//		Destroy();
-//	}*/
-//}
+void ABaseSpell::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
+{
+	if (otherActor != m_pCaster && m_pCaster != nullptr)
+	{
+		//Destroy shield when it by another spell
+		auto shield = Cast<ASpell_Protego>(otherActor);
+		if (shield)
+		{
+			shield->Destroy();
+		}
+
+		Destroy();
+	}
+}
 
 

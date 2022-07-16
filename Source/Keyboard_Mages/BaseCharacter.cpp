@@ -10,7 +10,7 @@
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	m_MaxHealth = 100.0f;
@@ -18,7 +18,11 @@ ABaseCharacter::ABaseCharacter()
 
 	m_IsAttacking = false;
 	m_IsHit = false;
+	m_HasCastSpell = false;
 
+	m_SpellIndex = -1;
+
+	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
 float ABaseCharacter::GetCurrentHealth() const
@@ -70,10 +74,5 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
-
-void ABaseCharacter::CastSpell()
-{
-	m_IsAttacking = true;
 }
 

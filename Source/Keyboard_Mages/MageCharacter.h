@@ -31,6 +31,8 @@ public:
 
 	virtual void CastSpell() override;
 
+	virtual void StartCasting() override;
+
 private:
 
 

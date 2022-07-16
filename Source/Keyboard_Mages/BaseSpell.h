@@ -7,6 +7,7 @@
 #include "BaseSpell.generated.h"
 
 class UStaticMeshComponent;
+class ABaseCharacter;
 
 UCLASS()
 class KEYBOARD_MAGES_API ABaseSpell : public AActor
@@ -26,17 +27,18 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Spell")
 		float m_CollisionSphereRadius;
 
+	UPROPERTY()
+		class USphereComponent* m_pSphereCollision;
+
 protected:
 
 	FString m_Name;
 
 	UPROPERTY()
-		class USphereComponent* m_pSphereCollision;
-
-	UPROPERTY()
 	UStaticMeshComponent* m_pStaticMeshComponent;
 
-	AActor* m_pCaster;
+	UPROPERTY()
+	ABaseCharacter* m_pCaster;
 
 
 private:
@@ -45,20 +47,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void CastSpell();
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	FString GetName();
+	FString GetSpellName();
 
-	void Cast();
-
-	UFUNCTION()
-		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void SetCaster(ABaseCharacter* caster);
 
 
 private:
-
 };

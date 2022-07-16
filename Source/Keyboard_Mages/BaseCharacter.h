@@ -40,9 +40,13 @@ protected:
 
 	bool m_IsHit;
 
+	bool m_HasCastSpell;
+
 	float m_AttackTime;
 
 	float m_AttackDuration;
+
+	int32 m_SpellIndex;
 
 public:	
 	// Called every frame
@@ -52,7 +56,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void CastSpell();
+		virtual void CastSpell() PURE_VIRTUAL(ABaseCharacter::CastSpell,);
+
+	UFUNCTION(BlueprintCallable)
+		virtual void StartCasting() PURE_VIRTUAL(ABaseCharacter::StartCasting, );
 
 	UFUNCTION(BlueprintCallable)
 		float GetCurrentHealth() const;

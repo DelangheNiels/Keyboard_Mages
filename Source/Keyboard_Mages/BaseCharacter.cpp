@@ -22,7 +22,6 @@ ABaseCharacter::ABaseCharacter()
 	m_IsAttacking = false;
 	m_IsHit = false;
 	m_HasCastSpell = false;
-	m_IsDead = false;
 
 	m_SpellIndex = -1;
 
@@ -70,9 +69,6 @@ void ABaseCharacter::BeginPlay()
 	if (m_pHitReactionMontage)
 		m_HitStunDuration = m_pHitReactionMontage->CalculateSequenceLength();
 
-	if (m_pDeadMontage)
-		m_TimeToPauseDeadAnimation = m_pDeadMontage->CalculateSequenceLength() * 0.90;
-
 	UHealthBarWidget* pHealthBar = Cast<UHealthBarWidget>(m_pHealthBarWidgetComp->GetUserWidgetObject());
 	pHealthBar->SetOwner(this);
 		
@@ -82,15 +78,6 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (m_IsDead && m_DeadTimer < m_TimeToPauseDeadAnimation)
-	{
-		m_DeadTimer += DeltaTime;
-		if (m_DeadTimer >= m_TimeToPauseDeadAnimation)
-		{
-			GetMesh()->GetAnimInstance()->Montage_SetPlayRate(m_pDeadMontage, 0);
-		}
-	}
 }
 
 // Called to bind functionality to input

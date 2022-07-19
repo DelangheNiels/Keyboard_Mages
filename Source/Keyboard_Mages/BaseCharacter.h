@@ -31,9 +31,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Animation Montages")
 		UAnimMontage* m_pHitReactionMontage;
 
-	UPROPERTY(EditAnywhere, Category = "Animation Montages")
-		UAnimMontage* m_pDeadMontage;
-
 	UPROPERTY(EditAnywhere, Category = "Spells")
 		TArray<TSubclassOf<ABaseSpell>> m_Spells;
 
@@ -68,8 +65,6 @@ protected:
 	float m_HitStunDuration;
 	float m_StunTimer;
 
-	bool m_IsDead;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -100,7 +95,5 @@ public:
 
 private:
 
-	float m_DeadTimer;
-	float m_TimeToPauseDeadAnimation;
 
 };

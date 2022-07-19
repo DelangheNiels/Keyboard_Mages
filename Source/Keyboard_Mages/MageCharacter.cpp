@@ -47,7 +47,7 @@ void AMageCharacter::TakeDamage(float damage)
 
 	else
 	{
-		m_IsDead = true;
+		m_pPlayerController->EnableTextBox(false);
 	}
 }
 
@@ -55,32 +55,37 @@ void AMageCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (m_IsAttacking)
+	if (m_CurrentHealth > 0)
 	{
-		m_AttackTime += DeltaTime;
-		if (m_AttackTime >= m_AttackDuration)
+		if (m_IsAttacking)
 		{
-			m_AttackTime = 0;
-			m_IsAttacking = false;
-			m_pPlayerController->EnableTextBox(true);
-			m_HasCastSpell = false;
+			m_AttackTime += DeltaTime;
+			if (m_AttackTime >= m_AttackDuration)
+			{
+				m_AttackTime = 0;
+				m_IsAttacking = false;
+				m_pPlayerController->EnableTextBox(true);
+				m_HasCastSpell = false;
+			}
+
+			if (m_AttackTime >= m_AttackDuration * 0.47 && !m_HasCastSpell)
+			{
+				CastSpell();
+			}
 		}
 
-		if (m_AttackTime >= m_AttackDuration * 0.47 && !m_HasCastSpell)
+		if (m_IsHit)
 		{
-			CastSpell();
+			m_StunTimer += DeltaTime;
+
+			if (m_StunTimer >= m_HitStunDuration)
+			{
+				m_pPlayerController->EnableTextBox(true);
+				m_StunTimer = 0;
+				m_IsHit = false;
+			}
 		}
 	}
 
-	if (m_IsHit)
-	{
-		m_StunTimer += DeltaTime;
-
-		if (m_StunTimer >= m_HitStunDuration)
-		{
-			m_pPlayerController->EnableTextBox(true);
-			m_StunTimer = 0;
-			m_IsHit = false;
-		}
-	}
+	
 }

@@ -18,54 +18,57 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 
 	Super::Tick(DeltaTime);
-
-	if (m_IsAttacking)
+	if (m_CurrentHealth > 0)
 	{
-		m_AttackTime += DeltaTime;
-		if (m_AttackTime >= m_AttackDuration)
+		if (m_IsAttacking)
 		{
-			m_AttackTime = 0;
-			m_IsAttacking = false;
-			m_HasCastSpell = false;
-		}
-
-		if (m_AttackTime >= m_AttackDuration * 0.55 && !m_HasCastSpell)
-		{
-			CastSpell();
-
-			if (m_pCastedSpell)
+			m_AttackTime += DeltaTime;
+			if (m_AttackTime >= m_AttackDuration)
 			{
-				m_pCastedSpell->InverseYawRotation();
-				m_pCastedSpell->InverseMovement();
-
-				auto currentLocation = m_pCastedSpell->GetActorLocation();
-				currentLocation.X = -52;
-				m_pCastedSpell->SetActorLocation(currentLocation);
+				m_AttackTime = 0;
+				m_IsAttacking = false;
+				m_HasCastSpell = false;
 			}
-				
-		}
-	}
 
-	else
-	{
-		m_AttackTimer += DeltaTime;
-		if (m_AttackTimer >= m_TimeToAttack)
+			if (m_AttackTime >= m_AttackDuration * 0.55 && !m_HasCastSpell)
+			{
+				CastSpell();
+
+				if (m_pCastedSpell)
+				{
+					m_pCastedSpell->InverseYawRotation();
+					m_pCastedSpell->InverseMovement();
+
+					auto currentLocation = m_pCastedSpell->GetActorLocation();
+					currentLocation.X = -52;
+					m_pCastedSpell->SetActorLocation(currentLocation);
+				}
+
+			}
+		}
+
+		else
 		{
-			m_AttackTimer = 0;
-			StartCasting();
+			m_AttackTimer += DeltaTime;
+			if (m_AttackTimer >= m_TimeToAttack)
+			{
+				m_AttackTimer = 0;
+				StartCasting();
+			}
 		}
-	}
 
-	if (m_IsHit)
-	{
-		m_StunTimer += DeltaTime;
-
-		if (m_StunTimer >= m_HitStunDuration)
+		if (m_IsHit)
 		{
-			m_IsHit = false;
-			m_StunTimer = 0;
+			m_StunTimer += DeltaTime;
+
+			if (m_StunTimer >= m_HitStunDuration)
+			{
+				m_IsHit = false;
+				m_StunTimer = 0;
+			}
 		}
 	}
+	
 }
 
 void AEnemyCharacter::StartCasting()
@@ -81,10 +84,5 @@ void AEnemyCharacter::TakeDamage(float damage)
 	if (m_CurrentHealth > 0)
 	{
 		m_IsHit = true;
-	}
-
-	else
-	{
-		m_IsDead = true;
 	}
 }

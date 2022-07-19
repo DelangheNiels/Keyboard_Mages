@@ -10,17 +10,12 @@
 ASpell_Incendio::ASpell_Incendio()
 {
 	m_Name = "Incendio";
-	m_pStaticMeshComponent->SetSimulatePhysics(false);
 
 }
 
 void ASpell_Incendio::BeginPlay()
 {
 	Super::BeginPlay();
-
-	/*if (m_pSphereCollision)
-		m_pSphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ASpell_Incendio::OnOverlapBegin);*/
-		
 		
 }
 

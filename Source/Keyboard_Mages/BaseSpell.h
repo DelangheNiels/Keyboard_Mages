@@ -58,6 +58,10 @@ public:
 
 	void SetCaster(ABaseCharacter* caster);
 
+	void InverseMovement();
+
+	void InverseYawRotation();
+
 
 private:
 };

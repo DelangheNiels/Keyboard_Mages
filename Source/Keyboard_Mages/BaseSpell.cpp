@@ -32,8 +32,6 @@ ABaseSpell::ABaseSpell()
 
 	m_pSphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collision"));
 	m_pSphereCollision->SetCollisionProfileName("Trigger");
-	m_pSphereCollision->SetHiddenInGame(false);
-	m_pSphereCollision->SetVisibility(true);
 	m_pSphereCollision->AttachTo(m_pStaticMeshComponent);
 
 }
@@ -69,6 +67,11 @@ void ABaseSpell::SetCaster(ABaseCharacter* caster)
 	m_pCaster = caster;
 }
 
+void ABaseSpell::InverseMovement()
+{
+	m_MovementSpeed *= -1;
+}
+
 void ABaseSpell::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
 	if (otherActor != m_pCaster && m_pCaster != nullptr)
@@ -78,10 +81,33 @@ void ABaseSpell::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 		if (shield)
 		{
 			shield->Destroy();
+			Destroy();
+			
 		}
 
-		Destroy();
+		auto character = Cast<ABaseCharacter>(otherActor);
+		if (character)
+		{
+			character->TakeDamage(m_Damage);
+			Destroy();
+			
+		}
+
+		else
+		{
+			otherActor->Destroy();
+			Destroy();
+		}
+
+
+
 	}
+
+}
+
+void ABaseSpell::InverseYawRotation()
+{
+	m_pStaticMeshComponent->AddLocalRotation(FRotator(0, 180, 0));
 }
 
 

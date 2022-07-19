@@ -2,10 +2,13 @@
 
 
 #include "BaseCharacter.h"
+#include "BaseSpell.h"
+#include "KeyboardMagesPlayerController.h"
+#include "HealthBarWidget.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
-#include "KeyboardMagesPlayerController.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -19,10 +22,14 @@ ABaseCharacter::ABaseCharacter()
 	m_IsAttacking = false;
 	m_IsHit = false;
 	m_HasCastSpell = false;
+	m_IsDead = false;
 
 	m_SpellIndex = -1;
 
 	GetMesh()->SetGenerateOverlapEvents(true);
+
+	m_pHealthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"), false);
+	m_pHealthBarWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 float ABaseCharacter::GetCurrentHealth() const
@@ -59,6 +66,15 @@ void ABaseCharacter::BeginPlay()
 
 	if(m_pAttackingMontage)
 		m_AttackDuration = m_pAttackingMontage->CalculateSequenceLength();
+
+	if (m_pHitReactionMontage)
+		m_HitStunDuration = m_pHitReactionMontage->CalculateSequenceLength();
+
+	if (m_pDeadMontage)
+		m_TimeToPauseDeadAnimation = m_pDeadMontage->CalculateSequenceLength() * 0.90;
+
+	UHealthBarWidget* pHealthBar = Cast<UHealthBarWidget>(m_pHealthBarWidgetComp->GetUserWidgetObject());
+	pHealthBar->SetOwner(this);
 		
 }
 
@@ -67,6 +83,14 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (m_IsDead && m_DeadTimer < m_TimeToPauseDeadAnimation)
+	{
+		m_DeadTimer += DeltaTime;
+		if (m_DeadTimer >= m_TimeToPauseDeadAnimation)
+		{
+			GetMesh()->GetAnimInstance()->Montage_SetPlayRate(m_pDeadMontage, 0);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -74,5 +98,17 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ABaseCharacter::CastSpell()
+{
+	FVector handLoc = GetMesh()->GetBoneLocation(m_BonenameToSpawnSpell);
+	auto spell = GetWorld()->SpawnActor<AActor>(m_Spells[m_SpellIndex], handLoc, FRotator(0, 0, 0));
+
+	m_pCastedSpell = Cast<ABaseSpell>(spell);
+	m_pCastedSpell->SetCaster(this);
+
+	m_SpellIndex = -1;
+	m_HasCastSpell = true;
 }
 

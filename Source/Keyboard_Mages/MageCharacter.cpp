@@ -14,18 +14,6 @@ void AMageCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AMageCharacter::CastSpell()
-{
-	FVector handLoc = GetMesh()->GetBoneLocation("RightHand");
-	auto spell = GetWorld()->SpawnActor<AActor>(m_Spells[m_SpellIndex], handLoc, FRotator(0, 0, 0));
-	
-	auto castedSpell = Cast<ABaseSpell>(spell);
-	castedSpell->SetCaster(this);
-
-	m_SpellIndex = -1;
-	m_HasCastSpell = true;
-}
-
 void AMageCharacter::StartCasting()
 {
 	FString spellLowercase = m_pPlayerController->GetTextboxText().ToLower();
@@ -47,6 +35,22 @@ void AMageCharacter::StartCasting()
 
 }
 
+void AMageCharacter::TakeDamage(float damage)
+{
+	m_CurrentHealth -= damage;
+
+	if (m_CurrentHealth > 0)
+	{
+		m_pPlayerController->EnableTextBox(false);
+		m_IsHit = true;
+	}
+
+	else
+	{
+		m_IsDead = true;
+	}
+}
+
 void AMageCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -65,6 +69,18 @@ void AMageCharacter::Tick(float DeltaTime)
 		if (m_AttackTime >= m_AttackDuration * 0.47 && !m_HasCastSpell)
 		{
 			CastSpell();
+		}
+	}
+
+	if (m_IsHit)
+	{
+		m_StunTimer += DeltaTime;
+
+		if (m_StunTimer >= m_HitStunDuration)
+		{
+			m_pPlayerController->EnableTextBox(true);
+			m_StunTimer = 0;
+			m_IsHit = false;
 		}
 	}
 }

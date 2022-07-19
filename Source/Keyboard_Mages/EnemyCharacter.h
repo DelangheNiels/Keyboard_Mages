@@ -4,19 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
-#include "MageCharacter.generated.h"
+#include "EnemyCharacter.generated.h"
 
 /**
  * 
  */
-
 UCLASS()
-class KEYBOARD_MAGES_API AMageCharacter : public ABaseCharacter
+class KEYBOARD_MAGES_API AEnemyCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
 public:
-	AMageCharacter();
+	AEnemyCharacter();
+
+	UPROPERTY(EditAnywhere, Category = "Attacking")
+		float m_TimeToAttack;
+
+private:
+
+	float m_AttackTimer;
 
 protected:
 	virtual void BeginPlay() override;
@@ -28,8 +34,5 @@ public:
 
 	virtual void TakeDamage(float damage) override;
 
-private:
 
-
-	
 };

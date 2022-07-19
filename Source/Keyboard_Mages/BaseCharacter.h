@@ -7,6 +7,7 @@
 #include "BaseCharacter.generated.h"
 
 class AKeyboardMagesPlayerController;
+class ABaseSpell;
 
 UCLASS()
 class KEYBOARD_MAGES_API ABaseCharacter : public ACharacter
@@ -17,20 +18,36 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 		AActor* Camera;
 
 	UPROPERTY(EditAnywhere, Category = "Animation Montages")
 		UAnimMontage* m_pAttackingMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Animation Montages")
+		UAnimMontage* m_pHitReactionMontage;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, Category = "Animation Montages")
+		UAnimMontage* m_pDeadMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Spells")
+		TArray<TSubclassOf<ABaseSpell>> m_Spells;
+
+	UPROPERTY(EditAnywhere, Category = "Animation Montages")
+		FName m_BonenameToSpawnSpell;
+
+	UPROPERTY(EditAnywhere)
+		class UWidgetComponent* m_pHealthBarWidgetComp;
 
 	UPROPERTY()
 	AKeyboardMagesPlayerController* m_pPlayerController;
 
+	UPROPERTY()
+	ABaseSpell* m_pCastedSpell;
 	
 	float m_MaxHealth;
 	
@@ -48,6 +65,11 @@ protected:
 
 	int32 m_SpellIndex;
 
+	float m_HitStunDuration;
+	float m_StunTimer;
+
+	bool m_IsDead;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -56,10 +78,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void CastSpell() PURE_VIRTUAL(ABaseCharacter::CastSpell,);
+		virtual void CastSpell();
 
 	UFUNCTION(BlueprintCallable)
 		virtual void StartCasting() PURE_VIRTUAL(ABaseCharacter::StartCasting, );
+
+	UFUNCTION()
+		virtual void TakeDamage(float damage) PURE_VIRTUAL(ABaseCharacter::TakeDamage, );
 
 	UFUNCTION(BlueprintCallable)
 		float GetCurrentHealth() const;
@@ -74,4 +99,8 @@ public:
 		bool GetIsHit() const;
 
 private:
+
+	float m_DeadTimer;
+	float m_TimeToPauseDeadAnimation;
+
 };

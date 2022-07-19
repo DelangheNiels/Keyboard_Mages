@@ -23,10 +23,6 @@ void ASpell_Protego::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-	/*if (m_pSphereCollision)
-		m_pSphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ASpell_Protego::OnOverlapBegin);*/
-
 	m_pStaticMeshComponent->SetWorldScale3D(m_MeshScale);
 	m_pStaticMeshComponent->AddLocalRotation(FRotator(0, 180, 0));
 }

@@ -23,6 +23,7 @@ public:
 private:
 
 	float m_AttackTimer;
+	float m_CenterPosX;
 
 protected:
 	virtual void BeginPlay() override;

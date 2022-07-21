@@ -6,7 +6,8 @@
 
 AEnemyCharacter::AEnemyCharacter()
 {
-
+	m_CenterPosX = -52;
+	m_MontagePercentageToReleaseSpell = 0.55f;
 }
 
 void AEnemyCharacter::BeginPlay()
@@ -30,7 +31,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 				m_HasCastSpell = false;
 			}
 
-			if (m_AttackTime >= m_AttackDuration * 0.55 && !m_HasCastSpell)
+			if (m_AttackTime >= m_AttackDuration * m_MontagePercentageToReleaseSpell && !m_HasCastSpell)
 			{
 				CastSpell();
 
@@ -40,7 +41,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 					m_pCastedSpell->InverseMovement();
 
 					auto currentLocation = m_pCastedSpell->GetActorLocation();
-					currentLocation.X = -52;
+					currentLocation.X = m_CenterPosX;
 					m_pCastedSpell->SetActorLocation(currentLocation);
 				}
 
@@ -50,11 +51,14 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		else
 		{
 			m_AttackTimer += DeltaTime;
-			if (m_AttackTimer >= m_TimeToAttack)
+
+			if (m_AttackTimer >= m_TimeToAttack && !m_IsHit)
 			{
 				m_AttackTimer = 0;
 				StartCasting();
 			}
+			
+			
 		}
 
 		if (m_IsHit)

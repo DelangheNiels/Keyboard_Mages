@@ -30,6 +30,11 @@ public:
 
 private:
 
+	UPROPERTY(EditAnywhere, Category = "Spells")
+		float m_WrongSpellWaitTime;
 
+	float m_WrongSpellTimer;
+
+	bool m_CastedWrongSpell;
 	
 };

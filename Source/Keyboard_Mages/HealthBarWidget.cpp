@@ -13,8 +13,6 @@ void UHealthBarWidget::SetOwner(ABaseCharacter* character)
 
 void UHealthBarWidget::NativeTick(const FGeometry& myGeometry, float inDeltaTime)
 {
-	//Super::NativeTick(myGeometry, inDeltaTime);
-
 	if (m_pOwner)
 	{
 		m_pHealthBar->SetPercent(m_pOwner->GetHealthPercentage());

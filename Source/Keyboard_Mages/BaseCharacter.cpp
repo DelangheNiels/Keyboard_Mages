@@ -26,9 +26,12 @@ ABaseCharacter::ABaseCharacter()
 	m_SpellIndex = -1;
 
 	GetMesh()->SetGenerateOverlapEvents(true);
+	GetMesh()->SetSimulatePhysics(false);
 
 	m_pHealthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"), false);
 	m_pHealthBarWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	m_MontagePercentageToReleaseSpell = 0.0f;
 }
 
 float ABaseCharacter::GetCurrentHealth() const

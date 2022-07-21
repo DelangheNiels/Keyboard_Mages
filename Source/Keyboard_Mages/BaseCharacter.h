@@ -65,6 +65,8 @@ protected:
 	float m_HitStunDuration;
 	float m_StunTimer;
 
+	float m_MontagePercentageToReleaseSpell;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

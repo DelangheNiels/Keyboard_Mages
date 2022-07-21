@@ -7,6 +7,9 @@
 
 AMageCharacter::AMageCharacter()
 {
+	m_MontagePercentageToReleaseSpell = 0.47f;
+	m_WrongSpellTimer = 0.0f;
+	m_CastedWrongSpell = false;
 }
 
 void AMageCharacter::BeginPlay()
@@ -31,7 +34,14 @@ void AMageCharacter::StartCasting()
 	{
 		m_IsAttacking = true;
 		m_pPlayerController->EnableTextBox(false);
+		return;
 	}
+
+	
+	m_CastedWrongSpell = true;
+	m_pPlayerController->EnableTextBox(false);
+	
+
 
 }
 
@@ -41,14 +51,11 @@ void AMageCharacter::TakeDamage(float damage)
 
 	if (m_CurrentHealth > 0)
 	{
-		m_pPlayerController->EnableTextBox(false);
 		m_IsHit = true;
 	}
 
-	else
-	{
-		m_pPlayerController->EnableTextBox(false);
-	}
+	m_pPlayerController->EnableTextBox(false);
+	
 }
 
 void AMageCharacter::Tick(float DeltaTime)
@@ -68,7 +75,7 @@ void AMageCharacter::Tick(float DeltaTime)
 				m_HasCastSpell = false;
 			}
 
-			if (m_AttackTime >= m_AttackDuration * 0.47 && !m_HasCastSpell)
+			if (m_AttackTime >= m_AttackDuration * m_MontagePercentageToReleaseSpell && !m_HasCastSpell)
 			{
 				CastSpell();
 			}
@@ -83,6 +90,17 @@ void AMageCharacter::Tick(float DeltaTime)
 				m_pPlayerController->EnableTextBox(true);
 				m_StunTimer = 0;
 				m_IsHit = false;
+			}
+		}
+
+		if (m_CastedWrongSpell)
+		{
+			m_WrongSpellTimer += DeltaTime;
+			if (m_WrongSpellTimer >= m_WrongSpellWaitTime)
+			{
+				m_CastedWrongSpell = false;
+				m_WrongSpellTimer = 0.0f;
+				m_pPlayerController->EnableTextBox(true);
 			}
 		}
 	}

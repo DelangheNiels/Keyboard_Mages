@@ -17,10 +17,10 @@ class KEYBOARD_MAGES_API AEnemyCharacter : public ABaseCharacter
 public:
 	AEnemyCharacter();
 
+private:
+
 	UPROPERTY(EditAnywhere, Category = "Attacking")
 		float m_TimeToAttack;
-
-private:
 
 	float m_AttackTimer;
 	float m_CenterPosX;

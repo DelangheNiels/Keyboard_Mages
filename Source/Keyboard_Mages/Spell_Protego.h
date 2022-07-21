@@ -18,15 +18,15 @@ public:
 
 	ASpell_Protego();
 
+private:
+
+	float m_AliveTimer;
+
 	UPROPERTY(EditAnywhere, Category = "Spell")
 		FVector m_MeshScale;
 
 	UPROPERTY(EditAnywhere, Category = "Spell")
 		float m_TimeToDissapear;
-
-private:
-
-	float m_AliveTimer;
 
 protected:
 

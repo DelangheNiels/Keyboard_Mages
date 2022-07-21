@@ -18,6 +18,8 @@ public:
 	// Sets default values for this actor's properties
 	ABaseSpell();
 
+protected:
+
 	UPROPERTY(EditAnywhere, Category = "Spell")
 		float m_MovementSpeed;
 
@@ -29,8 +31,6 @@ public:
 
 	UPROPERTY()
 		class USphereComponent* m_pSphereCollision;
-
-protected:
 
 	FString m_Name;
 
